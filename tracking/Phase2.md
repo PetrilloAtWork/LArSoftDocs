@@ -2,7 +2,7 @@
 % Giuseppe Cerati (cerati@fnal.gov)
   Gianluca Petrillo (petrillo@fnal.gov, editor)
   Erica Snider (erica@fnal.gov)
-% March 28, 2017
+% April 17, 2017
 
 
 Scope
@@ -70,8 +70,8 @@ Here they are not bound to any phase of the project: such assignment is
 described in the following section.
 
 
-Tools
-------
+Overview of tools
+------------------
 
 Phase II includes tools for creation and for access of the new data products and
 connections. These are two distinct and fairly independent groups.
@@ -82,21 +82,20 @@ be used by existing and future algorithms.
 
 Access tools facilitate the navigation of the related objects across data
 products, and provide an uniform interface.
-One specific goal of the toolset is to allow for an interface able to seamlessly
-access data from either `recob::Track` or `recob::TrackTrajectory`, without the
-user even being aware of the source of that information.
 
 Creation tools may be designed from simpler, lower level to more comprehensive,
 higher level:
 
 1. check of input for the creation of a track or trajectory: using as input
    separate collections of positions, momenta _(optional)_, flags _(optional)_,
-   and `recob::Hit` _art_ pointers, a function returns if these fulfill the
+   plus all the rest of the mandatory arguments of `recob::Track` constructor,
+   and in addition `recob::Hit` _art_ pointers and any other element to be
+   associated with the track, a function returns whether these fulfil the
    requirements for a track or trajectory (e.g. coherent number of entries,
    minimum number of points...)
 2. creation of a full object: starting from the same input as before, a
-   fully featured `recob::TrackTrajectory` or `recob::Track` (which requires
-   additional input) is returned
+   fully featured `recob::Track` is returned; the caller will have the option
+   to specify a fitter or to provide the required fit results
 3. creation of the full object and associations: starting from the same input as
    before, plus other objects _(optional)_ as vertices or reconstructed space
    points or seeds, data product collections are updated to include the new data
@@ -108,21 +107,30 @@ higher level:
 
 Access tools can also be tiered with increasing complexity and functionality:
 
-1. interface exposing the `recob::TrackTrajectory`, extracting its information
-   from either a `recob::TrackTrajectory` or a `recob::Track`; depending on our
-   decision, user code may be required to adopt a templated approach, or not
-2. interface exposing the above, and `recob::Track` interface; a protocol needs
-   to be established to define the discovery of available information
-3. interface as above, with additional point navigation facilities (e.g. skip
+1. interface exposing the `recob::Track`, extracting the information contained
+   by its data product and the associated hits; a protocol needs to be
+   established to define the discovery of available associated hits
+2. interface as above, with additional point navigation facilities (e.g. skip
    to the next point which is on the fit)
-4. interface exposing the information above, and offering the associated hits
+3. interface exposing the information above, and offering the associated hits
    and residuals
-5. as above, plus access to other type of associated objects (vertices,
+4. as above, plus access to other type of associated objects (vertices,
   clusters, etc.)
 
 Both the categories will need some connection to the entire collection in order
 to access the correct associated objects. The way this is achieved is an
 implementation detail to be designed.
+
+
+### Track-writing helper #######################################################
+
+The helper to write a `recob::Track` will have to be flexible enough to accept
+either complete fit results or a fitter as arguments.
+
+A fitter is a class implementing a specific fitter interface.
+The design and definition of this interface is part of the delivery process.
+It is desirable that the interface be framework-independent.
+
 
 
 Code updates
@@ -159,7 +167,8 @@ tools and the complete update of the code.
 For the creation tools, a baseline may be identified in the delivery of tools to
 cover the points (1) and (2) documented above, with (3) a desirable addition.
 
-For the access tools, a similar baseline can be defined in points (1) and (2).
+For the access tools, a comparable similar baseline can be defined by point (1)
+alone.
 This is expected to suffice to upgrade the existing code.
 
 The code to be updated may be in principle divided in LArSoft code and
@@ -208,9 +217,9 @@ the interface that is already deprecated.
 
 The proposal is summarised in the following:
 
-1. delivery of access tools, as described in this section
+1. delivery of creation tools, as described in this section
 2.  
-    1. delivery of creation tools, as also described in this section
+    1. delivery of access tools, also as described in this section
     2. update of LArSoft code using `recob::Track`, collecting the procedures
        into upgrade instructions for users and experiments
 3.  
@@ -238,8 +247,11 @@ History of this document
 
 - Version 1.0,
     from a meeting on March 21, 2017, with Giuseppe Cerati and Gianluca Petrillo
-- Version 1.1 (this document),
+- Version 1.1 (not competed),
     from a meeting on March 28, 2017, with Giuseppe Cerati, Gianluca Petrillo
+    and Erica Snider
+- Version 1.2 (not yet this document, but almost),
+    from a meeting on April 17, 2017, with Giuseppe Cerati, Gianluca Petrillo
     and Erica Snider
 
 
