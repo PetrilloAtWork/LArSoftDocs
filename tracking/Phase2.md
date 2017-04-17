@@ -157,7 +157,7 @@ The original plan includes within phase II the delivery of some lower level
 tools and the complete update of the code.
 
 For the creation tools, a baseline may be identified in the delivery of tools to
-cover the points (1) and (2) documented above, with (3) a desireable addition.
+cover the points (1) and (2) documented above, with (3) a desirable addition.
 
 For the access tools, a similar baseline can be defined in points (1) and (2).
 This is expected to suffice to upgrade the existing code.
